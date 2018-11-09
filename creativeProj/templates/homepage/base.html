@@ -1,0 +1,91 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+
+<html>
+
+<head>
+	<title>Title</title>
+	<!-- Bootstrap -->
+	<link 
+ 		href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
+ 		rel="stylesheet"
+		integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" 
+ 		crossorigin="anonymous"
+	>
+
+	<!-- Our own stylsheet -->
+	<link rel="stylesheet" type="text/css" href="{% static 'homepage/stylesheet.css' %}" />
+
+</head>
+
+<body>
+	<nav class="navbar navbar-inverse">
+		<div class="container-fluid">
+			<!-- Link to home page -->
+			<div class="navbar-header">
+				<a class="navbar-brand" href="{% url 'homepage:index' %}">Home</a>
+			</div>
+
+			<div class="nav navbar-collapse">
+				<ul class="nav navbar-nav">
+					<!-- Navbar items for users that are not logged in -->
+					{% if not user.is_authenticated %}
+					<li>
+						<a href="{% url 'homepage:login' %}">Login</a>
+					</li>
+					<li>
+						<a href="{% url 'homepage:register' %}">Register</a>
+					</li>		
+					{% else %}
+					<li>
+						<a href="{% url 'homepage:add_item' %}">Add Item For Sale</a>
+					</li>
+					{% endif %}
+							
+				</ul>
+
+				<!-- Form to search for items -->
+				<form class="navbar-form navbar-left" role="search" method="GET" action="{% url 'homepage:search' %}">
+					<div class="form-group">
+						<input type="text" class="form-control" name="q" placeholder="Search items here">
+					</div>
+					<button type="submit" class="btn btn-default">Search!</button>
+				</form>
+				
+				<ul class="nav navbar-nav navbar-right">
+					<!-- Display certain navbar items only if user is logged in -->
+					{% if user.is_authenticated %}		
+					<li><a href="{% url 'homepage:profile' %}"> {{ request.user }}</a></li>
+
+					<li>
+						<a href="{% url 'homepage:addmoneyform' %}"> &#36;{{ balance }}</a>
+					</li>
+					<li>
+						<a href="{% url 'homepage:cart' %}">Cart</a>
+					</li>
+					<li>
+						<a href="{% url 'homepage:logout' %}">Logout</a>
+					</li>
+					{% endif %}
+				</ul>
+			</div>
+		</div>
+	</nav>
+
+	<!-- Content of other html pages gets put here -->
+	{% block main %}
+	{% endblock %}
+
+	 <!-- Javascript and jQuery -->
+	 <script 
+	     src="https://code.jquery.com/jquery-2.2.2.min.js" 
+	     integrity="sha256-36cp2Co+/62rEAAYHLmRCPIych47CvdM+uTBJwSzWjI=" 
+	     crossorigin="anonymous"></script>
+	 <script 
+	     src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" 
+	     integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" 
+	     crossorigin="anonymous"></script>
+</body>
+
+</html>
